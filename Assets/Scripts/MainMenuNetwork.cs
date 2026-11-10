@@ -4,11 +4,14 @@ using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine.SceneManagement;
+using System.Net;
+using System.Net.Sockets;
 
 public class MainMenuNetwork : MonoBehaviour
 {
     [Header("Menu")]
     public TMP_InputField ipInput;
+    public TMP_Text ipDisplay;
 
     [Header("Connection")]
     public ushort port = 7777;
@@ -28,6 +31,39 @@ public class MainMenuNetwork : MonoBehaviour
         if (transport == null)
         {
             Debug.LogError("No se encontró Unity Transport en el NetworkManager.");
+        }
+
+        ShowLocalIP();
+    }
+
+    private void ShowLocalIP()
+    {
+        try
+        {
+            string localIP = "No disponible";
+
+            IPAddress[] addresses =
+                Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+
+            foreach (IPAddress address in addresses)
+            {
+                if (address.AddressFamily == AddressFamily.InterNetwork &&
+                    !IPAddress.IsLoopback(address))
+                {
+                    localIP = address.ToString();
+                    break;
+                }
+            }
+
+            if (ipDisplay != null)
+            {
+                ipDisplay.text = "IP del Host: " + localIP +
+                                 "\nPuerto: " + port;
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("No se pudo obtener la IP: " + e.Message);
         }
     }
 

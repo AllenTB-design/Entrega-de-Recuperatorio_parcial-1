@@ -5494,7 +5494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameTimer
   ShowTopMostFoldoutHeaderGroup: 1
-  matchDuration: 15
+  matchDuration: 150
   TimeRemaining:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0
